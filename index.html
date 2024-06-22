@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SODA-TAPv2 Presentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding-top: 30px;
+            min-height: 70px;
+        }
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            float: right;
+            display: inline;
+            padding: 0 20px 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        header .highlight, header .current a {
+            color: #e8491d;
+        }
+        .content {
+            padding: 20px;
+            background: #ffffff;
+            width: 90%;
+            margin: auto;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .content h1, .content h2 {
+            color: #35424a;
+        }
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            padding: 20px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-x: auto;
+            text-align: left;
+            margin: auto;
+        }
+        footer {
+            background: #35424a;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h2>SODA-TAPv2</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="http://example.com" target="_blank">Access SoDa-TAPv2</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container content">
+        <iframe src="https://docs.google.com/presentation/d/1WKzqf9PEWOjHlKC6_F_8TUndj3sBby4qwjz2V-ujjGI/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="569" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+
+        <h2>Backus Naur Form for the VQL</h2>
+        <p>The Backus-Naur Form (BNF) is a notation technique used to describe the syntax of programming and data description languages. Each rule in BNF notation is written with a non-terminal symbol on the left-hand side and the derivation it represents on the right-hand side, separated by the `::=` special symbol. The right-hand side can contain a combination of terminals and non-terminals. Non-terminals are typically enclosed by the <code>&lt;</code><code>&gt;</code> symbol and terminals are enclosed by quotation marks. We occasionally add text within parentheses to further explain a symbol in our BNF for readability. The simplicity and clarity of BNF allow language designers to unambiguously convey the structure of language constructs.</p>
+            <pre>
+                &lt;workflow&gt; ::= &lt;inter-dataset-comparison&gt; | &lt;intra-dataset-comparison&gt; | &lt;data-subset-creation&gt; | &lt;statistics-workflow&gt;
+                &lt;inter-dataset-comparison&gt; ::= &lt;multiple-filterers&gt; &lt;comparative-analysis&gt;
+                &lt;intra-dataset-comparison&gt; ::= &lt;filterer&gt; &lt;bucketing&gt; &lt;comparative-analysis&gt;
+                &lt;data-subset-creation&gt; ::= &lt;filterer&gt; “new-dataset-name” | &lt;bucket-picker&gt; “newdataset-name”
+                &lt;statistics-workflow&gt; ::= &lt;filterer&gt; &lt;stat&gt;
+                &lt;multiple-filterers&gt; ::= &lt;filterer&gt; | &lt;filterer&gt; &lt;filterer&gt;
+                &lt;comparative-analysis&gt; ::= &lt;plot&gt; | &lt;stat&gt;
+                &lt;filterer&gt; ::= &lt;tweet-filterer&gt; | &lt;author-filterer&gt;
+                &lt;bucketing&gt; ::= &lt;continuous-bucketing&gt; | &lt;discrete-bucketing&gt; | &lt;clustering&gt; | &lt;no-bucketing&gt;
+                &lt;bucket-picker&gt; ::= &lt;filterer&gt; &lt;bucketing&gt; “bucket-num”
+                &lt;stat&gt; ::= “descriptive-stats” | “Covariance & Correlation” | “t-test” | “AN(C)OVA” | “MAN(C)OVA”
+                &lt;plot&gt; ::= “pie-chart” | “box-plot” | “violin-plot” | “scatter-plot” | “faceted-box-plot” | “faceted-violin-plot” | “faceted-scatter-plot” | “line-plot”
+                &lt;tweet-filterer&gt; ::= &lt;dataset&gt; &lt;tweet-filters&gt;
+                &lt;author-filterer&gt; ::= &lt;dataset&gt; “pre-sample-size” &lt;author-filters&gt;
+                &lt;continuous-bucketing&gt; ::= &lt;continuous-bucketing-algorithm&gt; | “num-buckets” | “numeric-variable”
+                &lt;discrete-bucketing&gt; ::= “any-type-of-variable”
+                &lt;clustering&gt; ::= &lt;clustering-algorithm&gt; “num-clusters (optional)”
+                &lt;dataset&gt; ::= “any-index–or-alias”
+                &lt;tweet-filters&gt; ::= &lt;tweet-filter&gt; | &lt;tweet-filter&gt; &lt;tweet-filter&gt;
+                &lt;author-filters&gt; ::= &lt;author-filter&gt; | &lt;author-filter&gt; &lt;author-filter&gt;
+                &lt;continuous-bucketing-algorithm&gt; ::= “Jenks-natural-breaks” | “breaks-with-uniform-range” | “breaks-into-quartiles”
+                &lt;clustering-algorithm&gt; ::= “auto-K-Means” | “manual-K-means” | “HDBSCAN”
+                &lt;tweet-filter&gt; ::= &lt;range-filter&gt; | &lt;comparison-filter&gt; | &lt;sorting&gt; | &lt;position-filter&gt;
+                &lt;author-filter&gt; ::= &lt;tweet-count-filter&gt; | &lt;author-metric-filter&gt; | &lt;count-comparison-filter&gt;
+                &lt;range-filter&gt; ::= (“numeric-variable” | “date-variable”) (“number (from)” “number (to)” | “date (from)” “date (to)”)
+                &lt;comparison-filter&gt; ::= “any-type-of-variable” &lt;operator (overloaded)&gt; “value-compatible-with-variable-type”
+                &lt;sorting&gt; ::= &lt;sorting-order&gt; “any-type-of-variable”
+                &lt;position-filter&gt; ::= “integer (from)” “integer (to)”
+                &lt;tweet-count-filter&gt; ::= “integer (from)” “integer (to)”
+                &lt;author-metric-filter&gt; ::= &lt;aggregation-metric&gt; “numeric-variable” &lt;numeric-operator&gt; “number”
+                &lt;count-comparison-filter&gt; ::= “numeric-variable” &lt;numeric-operator&gt; “number” &lt;numeric-operator&gt; “numeric-variable” &lt;numeric-operator&gt; “number”
+                &lt;operator&gt; ::= “contains” | “does-not-contain” | &lt;numeric-operator&gt;
+                &lt;sorting-order&gt; ::= “asc” | “desc”
+                &lt;aggregation-metric&gt; ::= “average” | “minimum” | “maximum” | “sum” | “median” | “median-absolute-deviation”
+                &lt;numeric-operator&gt; ::= “&lt;” | “&gt;” | “≤” | “≥” | “=”
+            </pre>
+    </div>
+    <footer>
+        <p>&copy; 2024 Hassnain Ali</p>
+    </footer>
+</body>
+</html>
